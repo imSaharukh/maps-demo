@@ -1,15 +1,34 @@
 import { Injectable } from '@nestjs/common';
 import { CreatePlaceDto } from './dto/create-place.dto';
 import { UpdatePlaceDto } from './dto/update-place.dto';
+import { InjectModel } from '@nestjs/mongoose';
+import { Place, PlaceDocument } from './entities/place.entity';
+import { Model } from 'mongoose';
 
 @Injectable()
 export class PlaceService {
+  constructor(
+    @InjectModel(Place.name) private placeModel: Model<PlaceDocument>,
+  ) {}
   create(createPlaceDto: CreatePlaceDto) {
-    return 'This action adds a new place';
+    return this.placeModel.create(createPlaceDto);
   }
 
-  findAll() {
-    return `This action returns all place`;
+  findAll(name?: string, lan?: string, lon?: string) {
+    console.log(name, lan, lon);
+
+    return this.placeModel.find({
+      name: name ? { $regex: name, $options: 'i' } : { $exists: true },
+      location: {
+        $near: {
+          $geometry: {
+            type: 'Point',
+            coordinates: [parseFloat(lan), parseFloat(lon)],
+          },
+          $maxDistance: 1000,
+        },
+      },
+    });
   }
 
   findOne(id: number) {

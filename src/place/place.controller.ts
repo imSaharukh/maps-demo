@@ -1,7 +1,17 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Query,
+} from '@nestjs/common';
 import { PlaceService } from './place.service';
 import { CreatePlaceDto } from './dto/create-place.dto';
 import { UpdatePlaceDto } from './dto/update-place.dto';
+import { isNotNilOrWhitespace } from 'src/common/utils/isNull';
 
 @Controller('place')
 export class PlaceController {
@@ -12,9 +22,20 @@ export class PlaceController {
     return this.placeService.create(createPlaceDto);
   }
 
+  //set place query params
+  //get geojson from query params
+
   @Get()
-  findAll() {
-    return this.placeService.findAll();
+  findAll(
+    @Query('name') name: string,
+    @Query('lan') lan: string,
+    @Query('lon') lon: string,
+  ) {
+    return this.placeService.findAll(
+      isNotNilOrWhitespace(name) ? name : null,
+      lan ? lan : '',
+      lon ? lon : '',
+    );
   }
 
   @Get(':id')

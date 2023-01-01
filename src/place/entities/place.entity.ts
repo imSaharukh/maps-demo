@@ -1,7 +1,20 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { IsArray } from 'class-validator';
 import { HydratedDocument } from 'mongoose';
-import { GeoLocation } from 'src/common/types/location.type';
 
+@Schema({ _id: false })
+export class GeoJSON {
+  @Prop({ required: true })
+  @IsArray()
+  coordinates: [number];
+
+  @Prop({
+    required: true,
+    default: 'Point',
+    enum: ['Point'],
+  })
+  type: string;
+}
 @Schema()
 export class Place {
   @Prop()
@@ -10,9 +23,13 @@ export class Place {
   @Prop()
   description: string;
 
-  @Prop()
-  location: GeoLocation;
+  @Prop({
+    index: true,
+  })
+  location: GeoJSON;
 }
 
 export type PlaceDocument = HydratedDocument<Place>;
 export const PlaceSchema = SchemaFactory.createForClass(Place);
+
+PlaceSchema.index({ location: '2dsphere' });

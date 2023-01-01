@@ -1,11 +1,13 @@
-export type GeoLocation = {
-  type: {
-    type: string;
-    enum: ['Point'];
-    required: true;
-  };
+export type GeoPoint = {
   coordinates: {
     type: [number];
     required: true;
   };
 };
+
+export class GeoPointClass {
+  coordinates: {
+    type: [number];
+    required: true;
+  };
+}
