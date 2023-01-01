@@ -5,10 +5,13 @@ import { PlaceModule } from './place/place.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UsersModule } from './users/users.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
     PlaceModule,
+    AuthModule,
+    UsersModule,
     ConfigModule.forRoot({
       isGlobal: true,
     }),
