@@ -12,7 +12,8 @@ import { PlaceService } from './place.service';
 import { CreatePlaceDto } from './dto/create-place.dto';
 import { UpdatePlaceDto } from './dto/update-place.dto';
 import { isNotNilOrWhitespace } from 'src/common/utils/isNull';
-
+import { ApiTags } from '@nestjs/swagger';
+@ApiTags('place')
 @Controller('place')
 export class PlaceController {
   constructor(private readonly placeService: PlaceService) {}
@@ -21,9 +22,6 @@ export class PlaceController {
   create(@Body() createPlaceDto: CreatePlaceDto) {
     return this.placeService.create(createPlaceDto);
   }
-
-  //set place query params
-  //get geojson from query params
 
   @Get()
   findAll(
