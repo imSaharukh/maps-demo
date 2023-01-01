@@ -5,7 +5,7 @@ import { AuthService } from './auth.service';
 import { AuthDto } from './dto/auth.dto';
 import { AccessTokenGuard } from 'src/common/guards/accessToken.guard';
 import { RefreshTokenGuard } from 'src/common/guards/refreshToken.guard';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 @Controller('auth')
 @ApiTags('auth')
@@ -22,12 +22,14 @@ export class AuthController {
     return this.authService.signIn(data);
   }
 
+  @ApiBearerAuth()
   @UseGuards(AccessTokenGuard)
   @Get('logout')
   logout(@Req() req: any) {
     this.authService.logout(req.user.sub);
   }
 
+  @ApiBearerAuth()
   @UseGuards(RefreshTokenGuard)
   @Get('refresh')
   refreshTokens(@Req() req: any) {
