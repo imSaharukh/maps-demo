@@ -5,8 +5,10 @@ import { AuthService } from './auth.service';
 import { AuthDto } from './dto/auth.dto';
 import { AccessTokenGuard } from 'src/common/guards/accessToken.guard';
 import { RefreshTokenGuard } from 'src/common/guards/refreshToken.guard';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller('auth')
+@ApiTags('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
 
@@ -22,9 +24,8 @@ export class AuthController {
 
   @UseGuards(AccessTokenGuard)
   @Get('logout')
-  logout(@Req() req: Request) {
-    const nreq: any = req as any;
-    this.authService.logout(nreq.user['sub']);
+  logout(@Req() req: any) {
+    this.authService.logout(req.user.sub);
   }
 
   @UseGuards(RefreshTokenGuard)
