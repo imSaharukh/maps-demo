@@ -15,18 +15,24 @@ export class PlaceService {
   }
 
   findAll(name?: string, lan?: string, lon?: string) {
-    return this.placeModel.find({
-      name: name ? { $regex: name, $options: 'i' } : { $exists: true },
-      location: {
-        $near: {
-          $geometry: {
+    return this.placeModel.aggregate([
+      {
+        $geoNear: {
+          near: {
             type: 'Point',
             coordinates: [parseFloat(lan), parseFloat(lon)],
           },
-          $maxDistance: 1000,
+          distanceField: 'distance',
+          maxDistance: 1000,
+          spherical: true,
         },
       },
-    });
+      {
+        $match: {
+          name: name ? { $regex: name, $options: 'i' } : { $exists: true },
+        },
+      },
+    ]);
   }
 
   findOne(id: number) {

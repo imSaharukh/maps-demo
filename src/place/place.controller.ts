@@ -33,8 +33,8 @@ export class PlaceController {
   ) {
     return this.placeService.findAll(
       isNotNilOrWhitespace(name) ? name : null,
-      lan ? lan : '',
-      lon ? lon : '',
+      lan ? lan : '0',
+      lon ? lon : '0',
     );
   }
 
