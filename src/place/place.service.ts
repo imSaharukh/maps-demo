@@ -15,8 +15,6 @@ export class PlaceService {
   }
 
   findAll(name?: string, lan?: string, lon?: string) {
-    console.log(name, lan, lon);
-
     return this.placeModel.find({
       name: name ? { $regex: name, $options: 'i' } : { $exists: true },
       location: {
