@@ -26,12 +26,12 @@ export class PlaceController {
   @Get()
   findAll(
     @Query('name') name: string,
-    @Query('lan') lan: string,
+    @Query('lat') lat: string,
     @Query('lon') lon: string,
   ) {
     return this.placeService.findAll(
       isNotNilOrWhitespace(name) ? name : null,
-      lan ? lan : '0',
+      lat ? lat : '0',
       lon ? lon : '0',
     );
   }

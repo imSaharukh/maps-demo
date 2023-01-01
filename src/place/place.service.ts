@@ -14,13 +14,13 @@ export class PlaceService {
     return this.placeModel.create(createPlaceDto);
   }
 
-  findAll(name?: string, lan?: string, lon?: string) {
+  findAll(name?: string, lat?: string, lon?: string) {
     return this.placeModel.aggregate([
       {
         $geoNear: {
           near: {
             type: 'Point',
-            coordinates: [parseFloat(lan), parseFloat(lon)],
+            coordinates: [parseFloat(lat), parseFloat(lon)],
           },
           distanceField: 'distance',
           maxDistance: 1000,
